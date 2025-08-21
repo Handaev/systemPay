@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-cards" author="Zhora Khandaev">
+        <createTable tableName="cards">
+            <column name="id" type="bigInt" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="email" type="varchar(55)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="expiry_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="cvv_encrypted" type="varchar(3)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="varchar(10)">
+                <constraints nullable="false" checkConstraint="('ACTIVE', 'BLOCKED')"/>
+            </column>
+
+            <column name="balance" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="account_id" type="bigInt">
+                <constraints nullable="false"
+                             foreignKeyName="cards_account_id_accounts_id"
+                             references="accounts(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

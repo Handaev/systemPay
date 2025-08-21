@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-transactions" author="Zhora Khandaev">
+        <createTable tableName="transactions">
+            <column name="id" type="bigInt" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="transfer_amount" type="bigInt">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="type" type="varchar(15)">
+                <constraints nullable="false" checkConstraint="type IN ('DEPOSIT', 'WITHDRAWAL', 'TRANSFER')"/>
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="card_id" type="bigInt">
+                <constraints nullable="false"
+                             foreignKeyName="transactions_card_id_cards_id"
+                             references="cards(id)"/>
+            </column>
+
+            <column name="transfer_id" type="bigInt">
+                <constraints foreignKeyName="transactions_transfer_id_transfers_id"
+                             references="transfers(id)"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
