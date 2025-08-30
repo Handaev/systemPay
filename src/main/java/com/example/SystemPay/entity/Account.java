@@ -5,13 +5,13 @@ import com.example.SystemPay.entity.enums.Status;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-
 
 @Data
 @Entity
@@ -26,7 +26,7 @@ public class Account {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "passwordCrypto", nullable = false)
+    @Column(name = "password_crypto", nullable = false)
     private String password;
 
     @Column(name = "first_name")

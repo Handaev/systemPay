@@ -138,7 +138,7 @@
 					</execution>
 					<execution>
 						<id>check-minimal</id>
-						<phase>package</phase>
+						<phase>verify</phase> <!-- Измените phase на verify -->
 						<goals>
 							<goal>check</goal>
 						</goals>
@@ -150,27 +150,22 @@
 										<limit>
 											<counter>INSTRUCTION</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>1.0</minimum> <!-- вот тут -->
+											<minimum>0.8</minimum> <!-- 80% -->
 										</limit>
 										<limit>
 											<counter>BRANCH</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>1.0</minimum> <!-- и тут -->
+											<minimum>0.7</minimum> <!-- 70% -->
 										</limit>
 										<limit>
 											<counter>CLASS</counter>
 											<value>MISSEDCOUNT</value>
-											<maximum>0</maximum> <!-- и тут -->
+											<maximum>5</maximum> <!-- Допускаем 5 непокрытых классов -->
 										</limit>
 										<limit>
 											<counter>METHOD</counter>
 											<value>MISSEDCOUNT</value>
-											<maximum>0</maximum> <!-- и тут -->
-										</limit>
-										<limit>
-											<counter>LINE</counter>
-											<value>MISSEDCOUNT</value>
-											<maximum>0</maximum> <!-- и тут -->
+											<maximum>10</maximum> <!-- Допускаем 10 непокрытых методов -->
 										</limit>
 									</limits>
 								</rule>

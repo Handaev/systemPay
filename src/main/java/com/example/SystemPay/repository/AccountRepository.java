@@ -2,6 +2,7 @@ package com.example.SystemPay.repository;
 
 import com.example.SystemPay.entity.Account;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -31,9 +32,11 @@ public class AccountRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), accountId));
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), accountId));
+        TypedQuery<Account> typedQuery =  entityManager.createQuery(criteriaQuery);
 
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        return typedQuery.getSingleResult();
     }
 
     public void insert(Account account){

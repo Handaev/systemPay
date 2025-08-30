@@ -14,7 +14,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="passwordCrypto" type="varchar(100)">
+            <column name="password_crypto" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
 

@@ -4,6 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
+    <changeSet id="add-tag-1.0.2" author="Zhora Khandaev">
+        <tagDatabase tag="v.1.0.2"/>
+    </changeSet>
+
+    <changeSet id="add-tag-1.0.1" author="Zhora Khandaev">
+        <tagDatabase tag="v.1.0.1"/>
+    </changeSet>
+
     <changeSet id="add-tag-1.0.0" author="Zhora Khandaev">
         <tagDatabase tag="v.1.0.0"/>
     </changeSet>
