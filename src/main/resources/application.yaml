@@ -8,3 +8,14 @@ spring:
     password: JARgal2005
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      backs: all
+      retries: 3
+      enable-idempotence: true
+    consumer:
+      group:
+        id: CountryCounter

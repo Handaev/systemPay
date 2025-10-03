@@ -42,10 +42,10 @@ public class Account {
     private String phone;
 
     @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
     private Date createdAt;
 
     @Column(name = "status", nullable = false)
-    @CreationTimestamp
     private Status status = Status.ACTIVE;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
