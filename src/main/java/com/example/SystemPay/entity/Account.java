@@ -4,14 +4,13 @@ package com.example.SystemPay.entity;
 import com.example.SystemPay.entity.enums.Status;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 
 @Data
 @Entity
@@ -51,4 +50,11 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Collection<Card> cards;
+
+    public Account(Long id, String email, String password, String phone) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
 }

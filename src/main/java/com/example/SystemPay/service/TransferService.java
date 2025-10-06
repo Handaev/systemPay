@@ -5,9 +5,11 @@ import com.example.SystemPay.entity.Transfer;
 import com.example.SystemPay.repository.CardRepository;
 import com.example.SystemPay.repository.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TransferService {
 
     @Autowired
