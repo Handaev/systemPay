@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/account")
 public class AccountController {
 
@@ -24,12 +24,12 @@ public class AccountController {
 //    private KafkaService kafkaService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<AccountDto>> findAll(){
+    public ResponseEntity<List<Account>> findAll(){
         return ResponseEntity.ok(accountService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> findById(@PathVariable long id){
+    public ResponseEntity<Account> findById(@PathVariable long id){
         return ResponseEntity.ok(accountService.findById(id));
     }
 
@@ -40,8 +40,8 @@ public class AccountController {
     }
 
     @PatchMapping("/patch")
-    public HttpStatus update(@RequestBody AccountDto accountDto){
-        accountService.update(accountDto);
+    public HttpStatus update(@RequestBody Account account){
+        accountService.update(account);
         return HttpStatus.OK;
     }
 

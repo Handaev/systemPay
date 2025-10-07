@@ -2,6 +2,7 @@ package com.example.SystemPay.service;
 
 import com.example.SystemPay.dto.AccountDto;
 import com.example.SystemPay.entity.Account;
+import com.example.SystemPay.mapper.AccountDtoAccountMapper;
 import com.example.SystemPay.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,6 +21,9 @@ public class AccountService {
     @Autowired
     private KafkaTemplate<String, Account> kafkaTemplate;
 
+    @Autowired
+    AccountDtoAccountMapper accountDtoAccountMapper;
+
     public List<Account> findAll(){
         return accountRepository.findAll();
     }
@@ -29,16 +33,11 @@ public class AccountService {
     }
 
     public void insert(AccountDto accountDto){
-        Account account = new Account(
-                accountDto.getId(),
-                accountDto.getEmail(),
-                accountDto.getPassword(),
-                accountDto.getPhone()
-        );
+        Account account = accountDtoAccountMapper.accountDtoToAccount(accountDto);
         accountRepository.insert(account);
 
         CompletableFuture<SendResult<String, Account>> future = kafkaTemplate
-                .send("created-topic", accountDto.getEmail(), account);
+                .send("created-topic", account.getEmail(), account);
 
         future.whenComplete((result, exception) -> {
             if(exception != null){

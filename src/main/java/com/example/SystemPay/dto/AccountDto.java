@@ -10,17 +10,11 @@ import java.util.Date;
 @Data
 public class AccountDto {
 
-    private Long id;
-
     private String email;
 
     private String password;
 
     private String phone;
-
-    private Date createdAt;
-
-    private Status status = Status.ACTIVE;
 
 
 

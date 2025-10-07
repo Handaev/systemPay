@@ -50,11 +50,4 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Collection<Card> cards;
-
-    public Account(Long id, String email, String password, String phone) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-    }
 }

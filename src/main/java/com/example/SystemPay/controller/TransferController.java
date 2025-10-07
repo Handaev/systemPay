@@ -1,9 +1,6 @@
 package com.example.SystemPay.controller;
 
-import com.example.SystemPay.entity.Card;
 import com.example.SystemPay.entity.Transfer;
-import com.example.SystemPay.service.CardService;
-import com.example.SystemPay.service.KafkaService;
 import com.example.SystemPay.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
