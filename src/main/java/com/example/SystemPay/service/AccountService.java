@@ -1,8 +1,9 @@
 package com.example.SystemPay.service;
 
-import com.example.SystemPay.dto.AccountDto;
+import com.example.SystemPay.dto.AccountDtoRequest;
+import com.example.SystemPay.dto.AccountDtoResponse;
 import com.example.SystemPay.entity.Account;
-import com.example.SystemPay.mapper.AccountDtoAccountMapper;
+import com.example.SystemPay.mapper.AccountDtoMapper;
 import com.example.SystemPay.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,39 +23,33 @@ public class AccountService {
     private KafkaTemplate<String, Account> kafkaTemplate;
 
     @Autowired
-    AccountDtoAccountMapper accountDtoAccountMapper;
+    AccountDtoMapper accountDtoMapper;
 
-    public List<Account> findAll(){
-        return accountRepository.findAll();
+    public List<AccountDtoResponse> findAll(){
+        return accountRepository.findAll().stream().
+                map(x -> accountDtoMapper.accountToAccountDtoResponse(x)).toList();
     }
 
-    public Account findById(long id){
-        return accountRepository.findById(id);
+    public AccountDtoResponse findById(long id){
+        return accountDtoMapper.accountToAccountDtoResponse(accountRepository.findById(id));
     }
 
-    public void insert(AccountDto accountDto){
-        Account account = accountDtoAccountMapper.accountDtoToAccount(accountDto);
-        accountRepository.insert(account);
+    public AccountDtoResponse insert(AccountDtoRequest accountDtoRequest) throws ExecutionException, InterruptedException {
+        Account account = accountRepository.insert(accountDtoMapper.AccountDtoRequestToAccount(accountDtoRequest));
+        AccountDtoResponse responseAccount = accountDtoMapper.accountToAccountDtoResponse(account);
 
-        CompletableFuture<SendResult<String, Account>> future = kafkaTemplate
-                .send("created-topic", account.getEmail(), account);
+        SendResult<String, Account> result =
+                kafkaTemplate.send("created-topic", account.getEmail(), account).get();
 
-        future.whenComplete((result, exception) -> {
-            if(exception != null){
-                System.out.println("Failed to send message: " + exception.getMessage());
-            }else {
-                System.out.println("Result sent successfully: " + result.getRecordMetadata().toString());
-            }
-        });
-        System.out.println("ID Account: " + account.getId());
+        return responseAccount;
     }
 
-    public void update(Account account){
-        accountRepository.update(account);
+    public AccountDtoResponse update(Account account){
+        return accountDtoMapper.accountToAccountDtoResponse(accountRepository.update(account));
     }
 
-    public void delete(long id){
-        accountRepository.delete(id);
+    public AccountDtoResponse delete(long id){
+        return accountDtoMapper.accountToAccountDtoResponse(accountRepository.delete(id));
     }
 
 }

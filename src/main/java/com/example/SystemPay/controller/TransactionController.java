@@ -1,15 +1,15 @@
 package com.example.SystemPay.controller;
 
-import com.example.SystemPay.entity.Transaction;
-import com.example.SystemPay.entity.Transfer;
+import com.example.SystemPay.dto.TransactionDtoRequest;
+import com.example.SystemPay.dto.TransactionDtoResponse;
 import com.example.SystemPay.service.TransactionService;
-import com.example.SystemPay.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/transaction")
@@ -19,30 +19,31 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Transaction>> findAll(){
+    public ResponseEntity<List<TransactionDtoResponse>> findAll(){
         return ResponseEntity.ok(transactionService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Transaction> findById(@PathVariable long id){
-        return ResponseEntity.ok(transactionService.findById(id));
+    public ResponseEntity<TransactionDtoResponse> findById(@PathVariable long id){
+        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findById(id));
     }
 
     @PostMapping("/save")
-    public HttpStatus save(@RequestBody Transaction transaction){
-        transactionService.insert(transaction);
-        return HttpStatus.CREATED;
+    public ResponseEntity<TransactionDtoResponse> save(@RequestBody TransactionDtoRequest transactionDtoRequest)
+            throws ExecutionException, InterruptedException{
+        TransactionDtoResponse transactionDtoResponse =  transactionService.insert(transactionDtoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionDtoResponse);
     }
 
     @PatchMapping("/patch")
-    public HttpStatus update(@RequestBody Transaction transaction){
-        transactionService.update(transaction);
-        return HttpStatus.OK;
+    public ResponseEntity<TransactionDtoResponse> update(@RequestBody TransactionDtoRequest transactionDtoRequest){
+        TransactionDtoResponse transactionDtoResponse = transactionService.update(transactionDtoRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(transactionDtoResponse);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable long id){
-        transactionService.delete(id);
-        return HttpStatus.OK;
+    public ResponseEntity<TransactionDtoResponse> delete(@PathVariable long id){
+        TransactionDtoResponse transactionDtoResponse = transactionService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body(transactionDtoResponse);
     }
 }

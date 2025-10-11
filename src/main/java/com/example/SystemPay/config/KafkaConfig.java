@@ -49,13 +49,13 @@ public class KafkaConfig {
 
 
     @Bean
-    ProducerFactory<String, Account> producerFactory(){
-        return new DefaultKafkaProducerFactory<String, Account>(producerConfig());
+    ProducerFactory<String, Object> producerFactory(){
+        return new DefaultKafkaProducerFactory<String, Object>(producerConfig());
     }
 
     @Bean
-    KafkaTemplate<String, Account> kafkaTemplate(){
-        return new KafkaTemplate<String, Account>(producerFactory());
+    KafkaTemplate<String, Object> kafkaTemplate(){
+        return new KafkaTemplate<String, Object>(producerFactory());
     }
 
     @Bean

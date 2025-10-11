@@ -1,12 +1,19 @@
 package com.example.SystemPay.service;
 
-
 import com.example.SystemPay.entity.Card;
+import com.example.SystemPay.dto.CardDtoRequest;
+import com.example.SystemPay.dto.CardDtoResponse;
+import com.example.SystemPay.mapper.CardDtoMapper;
 import com.example.SystemPay.repository.CardRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class CardService {
@@ -14,25 +21,34 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public List<Card> findAll(){
-        return cardRepository.findAll();
+    @Autowired
+    private KafkaTemplate<String, Card> kafkaTemplate;
+
+    @Autowired
+    private CardDtoMapper cardDtoMapper;
+
+    public List<CardDtoResponse> findAll() {
+        return cardRepository.findAll().stream()
+                .map(cardDtoMapper::cardToCardDtoResponse)
+                .toList();
     }
 
-    public Card findById(long id){
-        return cardRepository.findById(id);
+    public CardDtoResponse findById(long id) {
+        return cardDtoMapper.cardToCardDtoResponse(cardRepository.findById(id));
     }
 
-    public void insert(Card card){
-        cardRepository.insert(card);
+    public CardDtoResponse insert(CardDtoRequest cardDtoRequest) {
+        Card card = cardRepository.insert(cardDtoMapper.cardDtoRequestToCard(cardDtoRequest));
+        return cardDtoMapper.cardToCardDtoResponse(card);
     }
 
-    public void update(Card card){
-        cardRepository.update(card);
+    public CardDtoResponse update(CardDtoRequest cardDtoRequest) throws EntityNotFoundException{
+        Card updatedCard = cardRepository.update(cardDtoMapper.cardDtoRequestToCard(cardDtoRequest));
+        return cardDtoMapper.cardToCardDtoResponse(updatedCard);
     }
 
-    public void delete(long id){
-        cardRepository.delete(id);
+    public CardDtoResponse delete(long id) throws EntityNotFoundException{
+        Card deletedCard = cardRepository.delete(id);
+        return cardDtoMapper.cardToCardDtoResponse(deletedCard);
     }
-
-
 }

@@ -1,18 +1,20 @@
 package com.example.SystemPay.controller;
 
-
-import com.example.SystemPay.dto.AccountDto;
+import com.example.SystemPay.dto.AccountDtoRequest;
+import com.example.SystemPay.dto.AccountDtoResponse;
 import com.example.SystemPay.entity.Account;
 import com.example.SystemPay.service.AccountService;
 //import com.example.SystemPay.service.KafkaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -20,54 +22,31 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-//    @Autowired
-//    private KafkaService kafkaService;
-
     @GetMapping("/all")
-    public ResponseEntity<List<Account>> findAll(){
+    public ResponseEntity<List<AccountDtoResponse>> findAll(){
         return ResponseEntity.ok(accountService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> findById(@PathVariable long id){
+    public ResponseEntity<AccountDtoResponse> findById(@PathVariable long id){
         return ResponseEntity.ok(accountService.findById(id));
     }
 
     @PostMapping("/save")
-    public HttpStatus save(@RequestBody AccountDto accountDto){
-        accountService.insert(accountDto);
-        return HttpStatus.CREATED;
+    public ResponseEntity<AccountDtoResponse> save(@RequestBody AccountDtoRequest accountDtoRequest) throws ExecutionException, InterruptedException {
+        AccountDtoResponse responseAccount = accountService.insert(accountDtoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseAccount);
     }
 
     @PatchMapping("/patch")
-    public HttpStatus update(@RequestBody Account account){
-        accountService.update(account);
-        return HttpStatus.OK;
+    public ResponseEntity<AccountDtoResponse> update(@RequestBody Account account){
+        AccountDtoResponse responseAccount = accountService.update(account);
+        return ResponseEntity.status(HttpStatus.OK).body(responseAccount);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable long id){
-        accountService.delete(id);
-        return HttpStatus.OK;
+    public ResponseEntity<AccountDtoResponse> delete(@PathVariable long id){
+        AccountDtoResponse responseAccount = accountService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body(responseAccount);
     }
-
-
-//    @GetMapping
-//    public HttpStatus send(){
-//        kafkaService.sendMessage();
-//        return HttpStatus.OK;
-//    }
-//
-//    @GetMapping("/some-endpoint")
-//    public ResponseEntity<String> someMethod() {
-//        kafkaService.sendMessage();
-//        return ResponseEntity.status(HttpStatus.OK).body("Success");
-//    }
-//
-//    @GetMapping("/read")
-//    public ResponseEntity<String> read() {
-//        kafkaService.readMessages();
-//        return ResponseEntity.status(HttpStatus.OK).body("Success");
-//    }
-
 }

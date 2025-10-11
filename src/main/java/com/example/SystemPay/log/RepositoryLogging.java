@@ -11,7 +11,6 @@ import java.util.Arrays;
 
 @Slf4j
 @Aspect
-@Component
 public class RepositoryLogging {
 
     @Around("execution(* com.example.SystemPay.service..*.*(..))")

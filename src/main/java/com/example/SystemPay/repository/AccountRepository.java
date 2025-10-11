@@ -2,6 +2,7 @@ package com.example.SystemPay.repository;
 
 import com.example.SystemPay.entity.Account;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -39,20 +40,25 @@ public class AccountRepository {
         return typedQuery.getSingleResult();
     }
 
-    public void insert(Account account){
+    public Account insert(Account account){
         entityManager.persist(account);
+        return account;
     }
 
-    public void update(Account account){
+    public Account update(Account account){
         if(entityManager.find(Account.class, account.getId()) != null) {
             entityManager.merge(account);
+            return account;
         }
+        throw new EntityNotFoundException("Card not found with id: " + account.getId());
     }
 
-    public void delete(long id){
+    public Account delete(long id){
         Account account = entityManager.find(Account.class, id);
         if(account != null){
             entityManager.remove(account);
+            return account;
         }
+        throw new EntityNotFoundException("Card not found with id: " + id);
     }
 }
